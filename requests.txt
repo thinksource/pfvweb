@@ -1,0 +1,6 @@
+flask
+flask-cors
+click
+numpy
+pillow
+psycopg2
