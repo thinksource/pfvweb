@@ -1,6 +1,7 @@
 <script lang="ts">
-import { inject, defineComponent, onMounted, onBeforeMount, ref, reactive, toRefs, PropType } from 'vue'
+import { defineComponent, onBeforeMount, ref, reactive, toRefs } from 'vue'
 import BaseModal from './BaseModal.vue'
+import axios from 'axios'
 
 function getDefaultPic (gender: string) {
   if (gender === 'female') {
@@ -12,13 +13,13 @@ function getDefaultPic (gender: string) {
   }
 }
 
-interface IUser{
-  id: string
-  first_name: string
-  last_name: string
-  gender: string
-  email: string
-  telephone: string
+interface UserData{
+  id: string;
+  first_name: string;
+  last_name: string;
+  gender: string;
+  email: string;
+  telephone: string;
 }
 
 export default defineComponent({
@@ -30,7 +31,7 @@ export default defineComponent({
     table_head: String
   },
   setup (props, context) {
-    const axios: any = inject('axios')
+    // const axios: any = inject('axios')
     const prePic = ref(null)
     const state = reactive({
       showModal: false,
@@ -44,10 +45,11 @@ export default defineComponent({
       loginEmail: '',
       loginId: -1,
       loginPic: '',
+      loginPicUrl: '#',
       loginGender: '',
       operate: '',
       resMessage: '',
-      list_user: new Array<IUser>()
+      list_user: new Array<UserData>(0)
     })
 
     const resetModal = () => {
@@ -106,10 +108,12 @@ export default defineComponent({
         state.loginGender = res.data.gender
         console.log(state)
         if (state.loginPic.length > 0) {
-          prePic?.setAttribute('src', `http://localhost:5000/api/image/${state.loginPic}/0`)
+          state.loginPicUrl = `http://localhost:5000/api/image/${state.loginPic}/0`
+        //   prePic?.setAttribute('src', `http://localhost:5000/api/image/${state.loginPic}/0`)
         } else {
           console.log(prePic)
-          prePic?.setAttribute('src', getDefaultPic(gender))
+          state.loginPicUrl = getDefaultPic(gender)
+        //   prePic?.setAttribute('src', getDefaultPic(gender))
         }
         console.log(prePic?.getAttribute('src'))
       }
@@ -195,7 +199,7 @@ export default defineComponent({
     onBeforeMount(() => {
       list_user()
     })
-    return { ...toRefs(state), createUser, loginAs, preview, submitImage, deleteImage, submitUser, editUser, resetModal, deleteUser }
+    return { ...toRefs(state), createUser, loginAs, preview, submitImage, deleteImage, submitUser, editUser, resetModal, deleteUser, prePic }
   }
 
 })
@@ -224,7 +228,7 @@ export default defineComponent({
     <div class="" v-if="loginId>0">
       Upload Your Picture:
       <input id='uploadFile' type='file' @change="preview($event)"/><br/>
-      <img id="prePic" ref = "prePic" src="#" alt="your image" /><br/>
+      <img id="prePic" :src="loginPicUrl" alt="your image" /><br/>
       <button class="btn btn-primary" @click='submitImage'>Upload Picture</button>
       <button class="btn btn-secondary" @click="deleteImage"> Delete Picture </button>
     </div>

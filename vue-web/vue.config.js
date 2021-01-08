@@ -1,5 +1,5 @@
 module.exports = {
-  outputDir: '../static',
-  indexPath: '../templates/index.html',
-  assetsDir: 'static/'
-}
+    outputDir: '../static',
+    indexPath: '../templates/index.html',
+    assetsDir: 'static/'
+  }
