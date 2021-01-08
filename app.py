@@ -195,8 +195,7 @@ def show_profile(id, gender):
 @app.route('/api/delete_image/<id>', methods=['delete', 'get'])
 def delete_image(id):
     with get_db().cursor() as cur:
-        cur.callproc('lo_unlink', (id,))
-        cur.execute('delete from image where picture = %s', (id,))
+        cur.callproc('deleteimage', (id,))
         cur.close()
     get_db().commit()
     return jsonify({'message': 'delete picture successful'})

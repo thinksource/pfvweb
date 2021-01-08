@@ -160,15 +160,15 @@ export default defineComponent({
       }
     }
     const deleteImage = async () => {
-      const prePic = document.getElementById('prePic')
+      // const prePic = document.getElementById('prePic')
       if (state.loginPic) {
         const res = await axios.delete(`http://localhost:5000/api/delete_image/${state.loginPic}`)
         state.loginPic = ''
         if (res.status === 200) {
-          prePic?.setAttribute('src', getDefaultPic(state.loginGender))
+          state.loginPicUrl = getDefaultPic(state.loginGender)
         }
       } else {
-        prePic?.setAttribute('src', getDefaultPic(state.loginGender))
+        state.loginPicUrl = getDefaultPic(state.loginGender)
       }
     }
 

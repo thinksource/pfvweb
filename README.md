@@ -45,6 +45,10 @@ pip install -r requests.txt
 
 ```
 
+#### conofigure the data connection
+
+change config.py file, set DB_SERVER, USER, PASSWORD
+
 #### run app
 
 ```

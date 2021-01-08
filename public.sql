@@ -73,6 +73,24 @@ END$BODY$
   COST 100;
 
 -- ----------------------------
+-- Function structure for deleteimage
+-- ----------------------------
+DROP FUNCTION IF EXISTS "public"."deleteimage"("iid" varchar);
+CREATE OR REPLACE FUNCTION "public"."deleteimage"("iid" varchar)
+  RETURNS "pg_catalog"."int4" AS $BODY$
+	DECLARE
+		pid "oid" := 0;
+		ret int := 0;
+	BEGIN
+		select picture into pid from image where id::text=iid;
+		ret = lo_unlink(pid);
+    delete from image where id::text=iid;
+	RETURN ret;
+END$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100
+
+-- ----------------------------
 -- Function structure for deleteuser
 -- ----------------------------
 DROP FUNCTION IF EXISTS "public"."deleteuser"("userid" int4);
