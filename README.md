@@ -32,6 +32,7 @@ The front-end build and install
 
 cd vue-web
 npm install
+npm install @vue/cli --save-dev
 npm run build
 
 ```
