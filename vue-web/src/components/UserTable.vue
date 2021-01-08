@@ -97,7 +97,6 @@ export default defineComponent({
       list_user()
     }
     const loginAs = async (email: string) => {
-      const prePic = document.getElementById('prePic')
       const res = await axios.post('http://localhost:5000/api/login', { email })
       console.log(res)
       if (res.status === 200) {
@@ -109,13 +108,10 @@ export default defineComponent({
         console.log(state)
         if (state.loginPic.length > 0) {
           state.loginPicUrl = `http://localhost:5000/api/image/${state.loginPic}/0`
-        //   prePic?.setAttribute('src', `http://localhost:5000/api/image/${state.loginPic}/0`)
         } else {
           console.log(prePic)
           state.loginPicUrl = getDefaultPic(gender)
-        //   prePic?.setAttribute('src', getDefaultPic(gender))
         }
-        console.log(prePic?.getAttribute('src'))
       }
     }
 
@@ -136,11 +132,11 @@ export default defineComponent({
 
     const preview = (e:InputEvent) => {
       const reader = new FileReader()
-      const prePic = document.getElementById('prePic')
+      // const prePic = document.getElementById('prePic')
       const input = e.target as HTMLInputElement
       if (input && input.files && prePic) {
         reader.addEventListener('load', function () {
-          prePic.setAttribute('src', reader.result as string)
+          state.loginPicUrl = reader.result as string
         })
         reader.readAsDataURL(input.files[0])
       }
