@@ -20,6 +20,7 @@ interface UserData{
   gender: string;
   email: string;
   telephone: string;
+  datebirth: Date;
 }
 
 export default defineComponent({
@@ -80,7 +81,8 @@ export default defineComponent({
         if (res.status === 200) {
           resetModal()
           state.resMessage = res.data.messsage
-        } else {
+        } 
+        else {
           state.resMessage = res.data.message
         }
         state.showModal = false
@@ -230,7 +232,7 @@ export default defineComponent({
       <button class="btn btn-primary" @click='submitImage'>Upload Picture</button>
       <button class="btn btn-secondary" @click="deleteImage"> Delete Picture </button>
     </div>
-    <div class="row row-cols-8">
+    <div class="row row-cols-9">
       <div class="col">Thrumbnail</div>
       <div class="col">Name</div>
       <div class="col">Email</div>
@@ -241,7 +243,7 @@ export default defineComponent({
       <div class="col"></div>
 
     </div>
-      <div class="row align-items-center row-cols-8" v-for="(item, index) in list_user" :key="index">
+      <div class="row align-items-center row-cols-9" v-for="(item, index) in list_user" :key="index">
         <div> <img :src="`http://localhost:5000/api/profile_image/${item.id}/${item.gender}?dummy=${Math.random()}`" alt="profile picture" width="40" height="40"></div>
         <div class="col">{{item.first_name}}.{{item.last_name}}</div>
         <div class="col">{{item.email}}</div>
@@ -288,6 +290,10 @@ export default defineComponent({
       <tr>
         <td>Telephone:</td>
         <td><input type="text" v-model="userTelephone"/></td>
+      </tr>
+      <tr>
+        <td>Date Birth:</td>
+        <td><input type="text" v-model="userDateBirth"/></td>
       </tr>
       <tr>
         <td>Profile Image:</td>

@@ -55,37 +55,39 @@ def get_random_num():
 def list_user():
     rows = []
     cur = get_db().cursor()
-    cur.execute("SELECT * from account;")
+    cur.execute("SELECT id, first_name, last_name, email, gender, telephone, datebirth from account;")
     result = cur.fetchall()
     for row in result:
         rows.append({'id': row[0], 'first_name': row[1], 'last_name': row[2], 
-            'email': row[3], 'gender': row[4], 'telephone': row[5]})
+            'email': row[3], 'gender': row[4], 'telephone': row[5], 'datebirth': row[6]})
     return jsonify(rows)
 
 @app.route('/api/create_user', methods=['post'])
 def create_user():
-    cur = get_db().cursor()
     if request.is_json:
         jdata = defaultdict(emptystr)
         jdata.update(request.json)
-        cur.execute('select * from account where email=%s', (jdata['email'],))
-        result = cur.fetchall()
-        if(len(result)<=0):
-            cur.execute('''Insert into account(first_name, last_name, email, gender, telephone)
-                Values(%s, %s, %s, %s, %s) RETURNING id;''',
-                (jdata['first_name'], jdata['last_name'], jdata['email'], jdata['gender'],jdata['telephone']))
+        with get_db().cursor() as cur:
+            cur.execute('select * from account where email=%s', (jdata['email'],))
             result = cur.fetchall()
-            print(result)
-            if(len(result) == 1):
-                cur.close()
-                get_db().commit()
-                return jsonify({'message': "successful insert account"})
-            else:
-                cur.close()
-                get_db().rollback()
-
-        else:
-            return jsonify({'message': "account already exist"}), 500
+            if(len(result)<=0):
+                try:
+                    cur.execute('''Insert into account(first_name, last_name, email, gender, telephone, datebirth)
+                        Values(%s, %s, %s, %s, %s) RETURNING id;''',
+                        (jdata['first_name'], jdata['last_name'], jdata['email'], jdata['gender'],jdata['telephone'], jdata['datebirth']))
+                    result = cur.fetchall()
+                    print(result)
+                    if(len(result) == 1):
+                        cur.close()
+                        get_db().commit()
+                        return jsonify({'message': "successful insert account"})
+                except psycopg2.Error as e:
+                    ret = str(e)
+                    cur.close()
+                    get_db().rollback()
+                    return jsonify({'message': ret}), 500
+    else:
+        return jsonify({'message': "account already exist"}), 500
 
 @app.route('/api/login', methods=['post'])
 def login():

@@ -4,5 +4,5 @@ class Config(object):
     DB = 'tdb'
     USER = 'postgres'
     PASSWORD = 'password'
-    DB_SERVER = '172.25.15.123'
+    DB_SERVER = '172.29.35.56'
     static_url_path=""
