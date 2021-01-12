@@ -177,6 +177,8 @@ export default defineComponent({
       if (res.status === 200) {
         state.list_user.splice(index, 1)
         state.resMessage = res.data.message
+        state.loginId = -1
+        document.getElementById('prePic')?.setAttribute('src', '#')
       }
     }
 
@@ -228,14 +230,14 @@ export default defineComponent({
       <button class="btn btn-primary" @click='submitImage'>Upload Picture</button>
       <button class="btn btn-secondary" @click="deleteImage"> Delete Picture </button>
     </div>
-    <div class="row">
-      <div class="col"> thrumbnail</div>
+    <div class="row row-cols-8">
+      <div class="col">Thrumbnail</div>
       <div class="col">Name</div>
-      <div class="col">email</div>
-      <div class="col">gender</div>
-      <div class="col">telephone</div>
-      <div class="col">edit</div>
-      <div class="col">delete</div>
+      <div class="col">Email</div>
+      <div class="col">Gender</div>
+      <div class="col">Telephone</div>
+      <div class="col">Edit</div>
+      <div class="col">Delete</div>
       <div class="col"></div>
 
     </div>
